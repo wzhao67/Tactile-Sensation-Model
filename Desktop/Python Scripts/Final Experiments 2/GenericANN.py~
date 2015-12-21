@@ -7,6 +7,7 @@ import skimage.io
 from Tkinter import *
 from DataGenerator import *
 from ANNUI import *
+from ANNTools import *
 
 #create UI
 root = Tk()
@@ -142,7 +143,7 @@ if(pxsigma == 0 and unlabelled_epochs != 0):
         print i, cost
 
 else:
-    w_h = init_weights_regular_pixels((784, hu), sigma = pxsgima)
+    w_h = init_weights_regular_pixels((784, hu), sigma = pxsigma)
 
 
 '''
@@ -258,4 +259,5 @@ print "*********TESTS**************************"
 print "Alphabet Classification: ", alpha_acc
 print "Braille Classification: ", braille_acc
 print "Mixed Classification: ", mixed_acc
+print "TPDT: ", TPDT_results_Y
 print "TPDT at dist=4: ", TPDT_four_acc

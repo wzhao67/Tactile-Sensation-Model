@@ -7,6 +7,7 @@ import skimage.io
 from Tkinter import *
 from DataGenerator import *
 from ANNUI import *
+from ANNTools import *
 
 #create UI
 root = Tk()
@@ -32,7 +33,7 @@ Input data
 '''
 #initialize unlabelled input data
 
-if(pxsigma == 0 and unlabelled_epochs != 0):
+if(unlabelled_epochs != 0):
 
     unlabelled_data = np.zeros((1, 784))
 
@@ -103,7 +104,7 @@ Y = T.fmatrix()
 '''
 Autoencoder layers (only if no pixelation enforcement)
 '''        
-if(pxsigma == 0 and unlabelled_epochs != 0):
+if(unlabelled_epochs != 0):
 
     def sgd(cost, params, reg, lr=unlabelled_LR):
         grads = T.grad(cost=cost, wrt = params)
@@ -142,7 +143,7 @@ if(pxsigma == 0 and unlabelled_epochs != 0):
         print i, cost
 
 else:
-    w_h = init_weights_regular_pixels((784, hu), sigma = pxsgima)
+    w_h = init_weights_regular_pixels((784, hu), sigma = pxsigma)
 
 
 '''

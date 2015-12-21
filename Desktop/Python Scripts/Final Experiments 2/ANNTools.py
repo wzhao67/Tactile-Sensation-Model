@@ -84,7 +84,6 @@ def display_L2_weights(w_o, row=7, col=12):
         col = 7     
 
    fig, figarr=pl.subplots(row,col)
-   w_o = w_o.get_value().transpose()
    for i in range(0,row):
        for j in range(0,col):
            figarr[i][j].matshow(w_o.get_value()[i*col+j].reshape(28,28)) 
@@ -137,11 +136,11 @@ def L1_pixelation_score_array(w_h):
     
 def L2_pixelation_score_array(w_o):
     
-    hu = w_h.get_value().shape[0]
+    hu = w_o.get_value().shape[0]
     score_array = []
 
     for i in range(hu):
-        field = w_h.get_value()[i]
+        field = w_o.get_value()[i]
         maximum = max(field)
         mean = np.mean(field)
         stddev = np.std(field)

@@ -142,7 +142,7 @@ def L2_pixelation_score_array(w_o):
 
     for i in range(hu):
         field = w_h.get_value()[i]
-        maximum = np.maximum(field)
+        maximum = max(field)
         mean = np.mean(field)
         stddev = np.std(field)
         score_array.append((maximum-mean)/stddev)
