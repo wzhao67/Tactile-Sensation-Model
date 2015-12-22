@@ -78,6 +78,9 @@ if 3 in labelled_flags:
     labelled_data_X = np.concatenate((labelled_data_X, braille_data_X))
     labelled_data_Y = np.concatenate((labelled_data_Y, braille_data_Y))
 
+#release GUI window
+app.quit()
+
 labelled_data_X = labelled_data_X[1:]
 labelled_data_Y = labelled_data_Y[1:]
 temp = list(zip(labelled_data_X, labelled_data_Y))
@@ -201,13 +204,13 @@ mixed_teX = np.asarray(mixed_teX)[:7800]
 mixed_teY = np.asarray(mixed_teY)[:7800]
 
 #alphabet accuracy test
-alpha_acc = np.mean(np.argmax(alpha_teY, axis=1) == np.argmax(predict(alpha_teX), axis=1))
+alpha_acc = np.mean(np.argmax(alpha_teY, axis=1) == np.argmax(predict(alpha_teX), axis=1)) * 100
 
 #braille accuracy test
-braille_acc = np.mean(np.argmax(braille_teY, axis=1) == np.argmax(predict(braille_teX), axis=1))
+braille_acc = np.mean(np.argmax(braille_teY, axis=1) == np.argmax(predict(braille_teX), axis=1)) * 100
 
 #mixed accuracy test
-mixed_acc = np.mean(np.argmax(mixed_teY, axis=1) == np.argmax(predict(mixed_teX), axis=1))
+mixed_acc = np.mean(np.argmax(mixed_teY, axis=1) == np.argmax(predict(mixed_teX), axis=1)) * 100
 
 #TPDT
 TPDT_results_X=[]
@@ -244,7 +247,17 @@ for i in range(2,24,2):
 pl.plot(TPDT_results_X, TPDT_results_Y)    
 TPDT_four_acc = TPDT_results_Y[1]
 
+#Network internal metrics
+L1L2cor = L1_L2_correlation(w_h, w_o)
+L1PxArr = np.asarray(L1_pixelation_score_array(w_h))
+L1PxScore = np.mean(L1PxArr)
+L2PxArr = np.asarray(L2_pixelation_score_array(w_o))
+L2PxScore = np.mean(L2PxArr)
+
+
 #print summary
+np.set_printoptions(precision = 3, linewidth = 10000)
+    
 print "**********SUMMARY************************"
 print "Unlabelled input flags: ", unlabelled_flags
 print "Labelled input flags: ", labelled_flags
@@ -256,6 +269,14 @@ print "Unlabelled Lambda: ", unlabelled_lambda
 print "Labelled Lambda: ", labelled_lambda
 print "Unlabelled LR: ", unlabelled_LR
 print "Labelled LR: ", labelled_LR
+
+print "*********INTERNAL METRICS***************"
+print "L1L2 Correlation: ", L1L2cor
+print "L1 Px Score: ", L1PxScore
+print "L2 Px Score: ", L2PxScore
+print "L1 Px Array: ", L1PxArr
+print "L2 Px Array: ", L2PxArr
+
 print "*********TESTS**************************"
 print "Alphabet Classification: ", alpha_acc
 print "Braille Classification: ", braille_acc
