@@ -9,7 +9,6 @@ from theano import tensor as T
 import numpy as np
 import skimage.filters
 import skimage.transform
-#import math
 import matplotlib.pylab as pl
 import random
 import scipy.stats as ss
@@ -17,6 +16,10 @@ import sklearn.metrics as sm
 import numpy.fft as fft
 #%pylab
 
+#helper functions
+def floatX(X):
+    return np.array(X, dtype=theano.config.floatX)
+    
 '''
 Initialize random weights
 '''
@@ -60,7 +63,7 @@ def init_weights_regular_pixels(shape, sigma=2.0):
 '''
 Display layer 1 weights
 '''
-def display_L1_weights(w_h, row=7, col=12): 
+def display_L1_weights(w_h): 
     
     if(w_h.get_value().shape[1] == 84):
         row = 7
@@ -74,7 +77,7 @@ def display_L1_weights(w_h, row=7, col=12):
         for j in range(0,col):
             figarr[i][j].matshow(w_h.get_value().transpose()[i*col+j].reshape(28,28)) 
 
-def display_L2_weights(w_o, row=7, col=12):  
+def display_L2_weights(w_o):  
 
    if(w_o.get_value().shape[0] == 84):
         row = 7
@@ -84,7 +87,6 @@ def display_L2_weights(w_o, row=7, col=12):
         col = 7     
 
    fig, figarr=pl.subplots(row,col)
-   w_o = w_o.get_value().transpose()
    for i in range(0,row):
        for j in range(0,col):
            figarr[i][j].matshow(w_o.get_value()[i*col+j].reshape(28,28)) 
@@ -110,9 +112,10 @@ def display_autoencoder_results(testing_data, begin=0, end=10):
 '''
 Find the pearson correlation of l1 and l2 weights
 '''
-def L1_L2_correlation(w_h, w_o, hu=84):
+def L1_L2_correlation(w_h, w_o):
     
     correlation = 0;    
+    hu = w_h.get_value().shape[1]
     
     for i in range(1000):
         ran = random.randint(0, hu-1)
@@ -137,11 +140,11 @@ def L1_pixelation_score_array(w_h):
     
 def L2_pixelation_score_array(w_o):
     
-    hu = w_h.get_value().shape[0]
+    hu = w_o.get_value().shape[0]
     score_array = []
 
     for i in range(hu):
-        field = w_h.get_value()[i]
+        field = w_o.get_value()[i]
         maximum = max(field)
         mean = np.mean(field)
         stddev = np.std(field)

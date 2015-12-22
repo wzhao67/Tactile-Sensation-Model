@@ -33,7 +33,7 @@ Input data
 '''
 #initialize unlabelled input data
 
-if(unlabelled_epochs != 0):
+if(pxsigma == 0 and unlabelled_epochs != 0):
 
     unlabelled_data = np.zeros((1, 784))
 
@@ -104,7 +104,7 @@ Y = T.fmatrix()
 '''
 Autoencoder layers (only if no pixelation enforcement)
 '''        
-if(unlabelled_epochs != 0):
+if(pxsigma == 0 and unlabelled_epochs != 0):
 
     def sgd(cost, params, reg, lr=unlabelled_LR):
         grads = T.grad(cost=cost, wrt = params)
@@ -144,12 +144,20 @@ if(unlabelled_epochs != 0):
 
 else:
     w_h = init_weights_regular_pixels((784, hu), sigma = pxsigma)
-
+    w_o = init_weights((hu, 784))
 
 '''
 Classifier layers
 '''
 ###new definition for our model and regularizer
+
+def sgd(cost, params, reg, lr=labelled_LR):
+    grads = T.grad(cost=cost, wrt = params)
+    updates=[]
+    for p,g in zip(params, grads):
+        updates.append((p,(p-g*lr-reg*lr)))
+    return updates
+        
 def model(X, w_h, w_o, w_o2):
     h = rectify(T.dot(X,w_h))
     o = rectify(T.dot(h,w_o))
@@ -219,13 +227,6 @@ for i in range(2,24,2):
             modified_predicted[j][0] = 1
         else:
             modified_predicted[j][1] = 1
-    
-    '''
-    for j in range(len(predicted)):
-        
-        modified_predicted[j][0] = modified_predicted[j][0]
-        modified_predicted[j][1] = modified_predicted[j][1]
-    '''
     
     predicted_indices = np.argmax(modified_predicted, axis=1)
     TPDT_data_Y_indices = np.argmax(TPDT_teY, axis=1)
