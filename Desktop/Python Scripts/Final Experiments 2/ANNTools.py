@@ -71,7 +71,9 @@ def display_L1_weights(w_h):
     if(w_h.get_value().shape[1] == 42):
         row = 6
         col = 7    
-     
+    if(w_h.get_value().shape[1] == 21):
+        row = 3
+        col = 7     
     fig, figarr=pl.subplots(row,col)
     for i in range(0,row):
         for j in range(0,col):
@@ -85,7 +87,9 @@ def display_L2_weights(w_o):
    if(w_o.get_value().shape[0] == 42):
         row = 6
         col = 7     
-
+   if(w_o.get_value().shape[0] == 21):
+        row = 3
+        col = 7       
    fig, figarr=pl.subplots(row,col)
    for i in range(0,row):
        for j in range(0,col):
